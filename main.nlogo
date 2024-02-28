@@ -1,14 +1,50 @@
-extensions [ palette ]
+extensions [ palette ]     ; for custom colors
+
+breed [ bees bee ]
 
 
 to setup
   clear-all
   create-beehive
+  spawn-bees
   reset-ticks
+end
+
+to go
+
+  ask bees [
+    bee-move
+  ]
+  tick
+
+end
+
+to bee-move
+
+  ask bees [
+    rt random 50
+    lt random 50
+    forward 1
+  ]
+
+end
+
+to spawn-bees
+
+  set-default-shape bees "bee"
+
+  create-bees beesInitPopulation [
+    set color gray     ; gray if no pollen collected, else green
+    set size 2
+    setxy (random 5) - 2 (random 5) - 2
+  ]
+
+
 end
 
 to create-beehive
   ask patches [
+    set pcolor lime
     if abs(pxcor) <= 2 and abs(pycor) <= 2 [
       ifelse abs(pycor) mod 2 = 0 [ set pcolor [221 148 29]] [ set pcolor yellow]
     ]
@@ -19,6 +55,8 @@ to create-beehive
     if abs(pxcor) = 0 and abs(pycor) = 4 [ set pcolor yellow ]
   ]
 end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -48,13 +86,45 @@ ticks
 30.0
 
 BUTTON
-52
-42
-115
-75
+14
+62
+77
+95
 NIL
 setup
 NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SLIDER
+15
+115
+187
+148
+beesInitPopulation
+beesInitPopulation
+0
+100
+53.0
+1
+1
+NIL
+HORIZONTAL
+
+BUTTON
+110
+63
+173
+96
+NIL
+go
+T
 1
 T
 OBSERVER
@@ -115,6 +185,31 @@ arrow
 true
 0
 Polygon -7500403 true true 150 0 0 150 105 150 105 293 195 293 195 150 300 150
+
+bee
+true
+0
+Polygon -1184463 true false 152 149 77 163 67 195 67 211 74 234 85 252 100 264 116 276 134 286 151 300 167 285 182 278 206 260 220 242 226 218 226 195 222 166
+Polygon -16777216 true false 150 149 128 151 114 151 98 145 80 122 80 103 81 83 95 67 117 58 141 54 151 53 177 55 195 66 207 82 211 94 211 116 204 139 189 149 171 152
+Polygon -7500403 true true 151 54 119 59 96 60 81 50 78 39 87 25 103 18 115 23 121 13 150 1 180 14 189 23 197 17 210 19 222 30 222 44 212 57 192 58
+Polygon -16777216 true false 70 185 74 171 223 172 224 186
+Polygon -16777216 true false 67 211 71 226 224 226 225 211 67 211
+Polygon -16777216 true false 91 257 106 269 195 269 211 255
+Line -1 false 144 100 70 87
+Line -1 false 70 87 45 87
+Line -1 false 45 86 26 97
+Line -1 false 26 96 22 115
+Line -1 false 22 115 25 130
+Line -1 false 26 131 37 141
+Line -1 false 37 141 55 144
+Line -1 false 55 143 143 101
+Line -1 false 141 100 227 138
+Line -1 false 227 138 241 137
+Line -1 false 241 137 249 129
+Line -1 false 249 129 254 110
+Line -1 false 253 108 248 97
+Line -1 false 249 95 235 82
+Line -1 false 235 82 144 100
 
 box
 false
