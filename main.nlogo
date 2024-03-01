@@ -1,13 +1,33 @@
 extensions [ palette ]     ; for custom colors
 
 breed [ bees bee ]
-
+breed [ flowers flower ]
 
 to setup
   clear-all
   create-beehive
   spawn-bees
+  spawn-flowers
   reset-ticks
+end
+
+to spawn-flowers
+  set-default-shape flowers "flower"
+  let hive-size 3
+
+
+  create-flowers flowersInitPopulation [
+    let x 0
+    let y 0
+
+    while [ sqrt(x * x + y * y) <= 6 ] [    ; prvent flowers from spawning at the hive
+      set x random-xcor
+      set y random-xcor
+    ]
+
+    setxy x y
+    set size 2
+  ]
 end
 
 to go
@@ -55,8 +75,6 @@ to create-beehive
     if abs(pxcor) = 0 and abs(pycor) = 4 [ set pcolor yellow ]
   ]
 end
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -133,6 +151,21 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+15
+167
+187
+200
+flowersInitPopulation
+flowersInitPopulation
+0
+75
+75.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
