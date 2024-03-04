@@ -3,6 +3,17 @@ extensions [ palette ]     ; for custom colors
 breed [ bees bee ]
 breed [flowers flower]
 
+bees-own [
+  nectar-carried
+  carrying-pollen?
+]
+
+flowers-own [
+  nectar
+  nectar-replenish-rate
+  nectar-replenish-timer
+]
+
 
 to setup
   clear-all
@@ -13,21 +24,10 @@ to setup
 end
 
 to go
-
-  ask bees [
-    bee-move
+  bee-move
+  sip-nectar
+  replenish-nectar
   tick
-
-end
-
-to bee-move
-
-  ask bees [
-    rt random 50
-    lt random 50
-    forward 1
-  ]
-
 end
 
 to spawn-bees
@@ -38,6 +38,7 @@ to spawn-bees
     set color gray     ; gray if no pollen collected, else green
     set size 1
     setxy (random 5) - 2 (random 5) - 2
+    set nectar-carried 0
   ]
 
 
@@ -63,10 +64,55 @@ to spawn-flowers
 
   create-flowers (flowerDensity / 100) * totalPatches [
     move-to one-of patches with [not any? turtles-here and pcolor = lime]
+    set nectar maxNectar
+    set nectar-replenish-rate nectarReplenishRate
   ]
 
 end
 
+
+to bee-move
+  ask bees [
+    ; Check if there are flowers with nectar nearby
+    let target one-of (flowers with [nectar > 0] in-radius 5)
+    ifelse target != nobody [
+      face target
+      fd 1
+    ]
+    [
+      ; If no nearby flowers have nectar, move randomly
+      rt random 50
+      lt random 50
+      fd 1
+    ]
+  ]
+end
+
+to sip-nectar
+  ask bees-on flowers [
+    let flower-here one-of flowers-here
+    if [nectar] of flower-here > 0 and nectar-carried < beeNectarCapacity[
+      ask flower-here [
+        set nectar nectar - 1
+      ]
+      set nectar-carried nectar-carried + 1
+    ]
+  ]
+end
+
+to replenish-nectar
+  ask flowers [
+    if nectar < maxNectar [
+      ifelse nectar-replenish-timer >= nectarReplenishRate [
+        set nectar nectar + 1
+        set nectar-replenish-timer 0
+      ]
+      [
+        set nectar-replenish-timer nectar-replenish-timer + 1
+      ]
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -121,7 +167,7 @@ beesInitPopulation
 beesInitPopulation
 0
 100
-53.0
+6.0
 1
 1
 NIL
@@ -145,10 +191,10 @@ NIL
 1
 
 SLIDER
-15
-235
-187
-268
+16
+301
+188
+334
 flowerDensity
 flowerDensity
 0
@@ -160,13 +206,75 @@ flowerDensity
 HORIZONTAL
 
 TEXTBOX
-20
-203
-170
-221
+21
+269
+171
+287
 Flower Settings
 10
 0.0
+1
+
+SLIDER
+28
+363
+200
+396
+maxNectar
+maxNectar
+1
+10
+2.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+21
+425
+198
+458
+nectarReplenishRate
+nectarReplenishRate
+0
+10
+2.0
+1
+1
+ticks
+HORIZONTAL
+
+SLIDER
+19
+171
+191
+204
+beeNectarCapacity
+beeNectarCapacity
+1
+10
+10.0
+1
+1
+NIL
+HORIZONTAL
+
+BUTTON
+104
+16
+177
+49
+go once
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
 1
 
 @#$#@#$#@
