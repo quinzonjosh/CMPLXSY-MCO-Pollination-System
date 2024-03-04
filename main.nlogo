@@ -16,7 +16,6 @@ to go
 
   ask bees [
     bee-move
-  ]
   tick
 
 end
