@@ -1,12 +1,14 @@
 extensions [ palette ]     ; for custom colors
 
 breed [ bees bee ]
+breed [flowers flower]
 
 
 to setup
   clear-all
   create-beehive
   spawn-bees
+  spawn-flowers
   reset-ticks
 end
 
@@ -35,7 +37,7 @@ to spawn-bees
 
   create-bees beesInitPopulation [
     set color gray     ; gray if no pollen collected, else green
-    set size 2
+    set size 1
     setxy (random 5) - 2 (random 5) - 2
   ]
 
@@ -56,16 +58,25 @@ to create-beehive
   ]
 end
 
+to spawn-flowers
+  set-default-shape flowers "flower"
+  let totalPatches count patches with [pcolor = lime]
+
+  create-flowers (flowerDensity / 100) * totalPatches [
+    move-to one-of patches with [not any? turtles-here and pcolor = lime]
+  ]
+
+end
 
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
-647
-448
+742
+543
 -1
 -1
-13.0
+15.9
 1
 10
 1
@@ -79,8 +90,8 @@ GRAPHICS-WINDOW
 16
 -16
 16
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -132,6 +143,31 @@ NIL
 NIL
 NIL
 NIL
+1
+
+SLIDER
+15
+235
+187
+268
+flowerDensity
+flowerDensity
+0
+100
+4.0
+1
+1
+%
+HORIZONTAL
+
+TEXTBOX
+20
+203
+170
+221
+Flower Settings
+10
+0.0
 1
 
 @#$#@#$#@
