@@ -88,6 +88,11 @@ to bee-move
       lt random 50
       fd 1
     ]
+
+    if random-float 1 < 0.1 and hasPollen [ ; 10% chance and currently has pollen
+      set hasPollen false
+      set label ""  ; Clear label if pollen is lost
+    ]
   ]
 end
 
@@ -111,7 +116,9 @@ end
 to givePollen
   ask bees-on flowers[
    set hasPollen true
+   set label "POLLEN"
   ]
+
 end
 
 to replenish-nectar
@@ -213,7 +220,7 @@ flowerDensity
 flowerDensity
 0
 100
-4.0
+1.0
 1
 1
 %
@@ -290,6 +297,21 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+19
+220
+214
+253
+chancePollenToDisappear
+chancePollenToDisappear
+0
+1
+0.1
+.01
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
