@@ -5,13 +5,14 @@ breed [flowers flower]
 
 bees-own [
   nectar-carried
-  carrying-pollen?
+  hasPollen
 ]
 
 flowers-own [
   nectar
   nectar-replenish-rate
   nectar-replenish-timer
+  isFertilized
 ]
 
 
@@ -25,7 +26,7 @@ end
 
 to go
   bee-move
-  sip-nectar
+  bee-lands-on-flower
   replenish-nectar
   tick
 end
@@ -39,6 +40,7 @@ to spawn-bees
     set size 1
     setxy (random 5) - 2 (random 5) - 2
     set nectar-carried 0
+    set hasPollen false
   ]
 
 
@@ -66,6 +68,7 @@ to spawn-flowers
     move-to one-of patches with [not any? turtles-here and pcolor = lime]
     set nectar maxNectar
     set nectar-replenish-rate nectarReplenishRate
+    set isFertilized false
   ]
 
 end
@@ -88,15 +91,26 @@ to bee-move
   ]
 end
 
-to sip-nectar
+;All interactions between bee and flower
+to bee-lands-on-flower
   ask bees-on flowers [
     let flower-here one-of flowers-here
     if [nectar] of flower-here > 0 and nectar-carried < beeNectarCapacity[
       ask flower-here [
         set nectar nectar - 1
+        if [hasPollen] of myself [ ; Check if the bee has pollen
+          set isFertilized true
+        ]
       ]
       set nectar-carried nectar-carried + 1
+      givePollen
     ]
+  ]
+end
+
+to givePollen
+  ask bees-on flowers[
+   set hasPollen true
   ]
 end
 
