@@ -117,6 +117,7 @@ to givePollen
   ask bees-on flowers[
    set hasPollen true
    set label "POLLEN"
+   set color violet
   ]
 
 end
