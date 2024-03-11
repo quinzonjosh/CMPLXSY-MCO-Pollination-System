@@ -5,6 +5,7 @@ breed [flowers flower]
 
 bees-own [
   nectar-carried
+  storingNectar
   hasPollen
 ]
 
@@ -40,6 +41,7 @@ to spawn-bees
     set size 1
     setxy (random 5) - 2 (random 5) - 2
     set nectar-carried 0
+    set storingNectar false
     set hasPollen false
   ]
 
@@ -78,21 +80,40 @@ to bee-move
   ask bees [
     ; Check if there are flowers with nectar nearby
     let target one-of (flowers with [nectar > 0] in-radius 5)
-    ifelse target != nobody [
-      face target
+    ifelse storingNectar [
+      ; If the bee is storing nectar, move back to the beehive
+      face patch 0 0
       fd 1
+      if distance patch 0 0 < 2
+      [
+        bee-store-nectar
+      ]
     ]
     [
-      ; If no nearby flowers have nectar, move randomly
-      rt random 50
-      lt random 50
-      fd 1
-    ]
+      ifelse target != nobody [
+        face target
+        fd 1
+      ]
+      [
+        ; If no nearby flowers have nectar, move randomly
+        rt random 50
+        lt random 50
+        fd 1
+      ]
 
-    if random-float 1 < 0.1 and hasPollen [ ; 10% chance and currently has pollen
-      set hasPollen false
-      set label ""  ; Clear label if pollen is lost
+      if random-float 1 < 0.1 and hasPollen [ ; 10% chance and currently has pollen
+        set hasPollen false
+        set label ""  ; Clear label if pollen is lost
+      ]
     ]
+  ]
+end
+
+to bee-store-nectar
+  set nectar-carried nectar-carried - 1
+  if nectar-carried = 0 [
+    set storingNectar false
+    set color gray
   ]
 end
 
@@ -108,6 +129,9 @@ to bee-lands-on-flower
         ]
       ]
       set nectar-carried nectar-carried + 1
+      if nectar-carried >= beeNectarCapacity [ ; If the bee has reached its nectar capacity
+        set storingNectar true
+      ]
       givePollen
     ]
   ]
@@ -189,7 +213,7 @@ beesInitPopulation
 beesInitPopulation
 0
 100
-6.0
+27.0
 1
 1
 NIL
@@ -221,7 +245,7 @@ flowerDensity
 flowerDensity
 0
 100
-1.0
+17.0
 1
 1
 %
@@ -261,7 +285,7 @@ nectarReplenishRate
 nectarReplenishRate
 0
 10
-2.0
+9.0
 1
 1
 ticks
