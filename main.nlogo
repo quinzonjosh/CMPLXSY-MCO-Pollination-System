@@ -2,6 +2,7 @@ extensions [ palette ]     ; for custom colors
 
 breed [ bees bee ]
 breed [flowers flower]
+breed [seeds seed]
 
 bees-own [
   nectar-carried
@@ -16,6 +17,9 @@ flowers-own [
   isFertilized
 ]
 
+seeds-own [
+  bloomTime
+]
 
 to setup
   clear-all
@@ -75,7 +79,6 @@ to spawn-flowers
 
 end
 
-
 to bee-move
   ask bees [
     ; Check if there are flowers with nectar nearby
@@ -124,8 +127,9 @@ to bee-lands-on-flower
     if [nectar] of flower-here > 0 and nectar-carried < beeNectarCapacity[
       ask flower-here [
         set nectar nectar - 1
-        if [hasPollen] of myself [ ; Check if the bee has pollen
+        if [hasPollen] of myself and random-float 100 < flowerFertilizationRate [ ; Check if the bee has pollen
           set isFertilized true
+          spawn-seeds-around-fertilized-flower
         ]
       ]
       set nectar-carried nectar-carried + 1
@@ -137,13 +141,60 @@ to bee-lands-on-flower
   ]
 end
 
+to spawn-seeds-around-fertilized-flower
+  ask myself [
+;    let delay-duration 25 ; Adjust the delay duration (in ticks) as needed
+;    repeat delay-duration [
+;      wait 1
+;      tick-advance 1 ;
+;    ]
+
+    let displacement 1 ; Adjust the distance as needed
+
+    hatch-seeds 1 [
+      set breed seeds
+      set heading towards one-of flowers-here ; Set the initial heading to face east
+      fd displacement ; Move forward by the specified displacement
+      set color brown
+      set shape "dot" ; You can customize the shape of the seed
+      set label "" ; Clear the label for the spawned seed
+    ]
+
+    hatch-seeds 1 [
+      set breed seeds
+      set heading towards one-of flowers-here + 90 ; Set the initial heading to face north
+      fd displacement ; Move forward by the specified displacement
+      set color brown
+      set shape "dot"
+      set label ""
+    ]
+
+    hatch-seeds 1 [
+      set breed seeds
+      set heading towards one-of flowers-here + 180 ; Set the initial heading to face west
+      fd displacement ; Move forward by the specified displacement
+      set color brown
+      set shape "dot"
+      set label ""
+    ]
+
+    hatch-seeds 1 [
+      set breed seeds
+      set heading towards one-of flowers-here + 270 ; Set the initial heading to face south
+      fd displacement ; Move forward by the specified displacement
+      set color brown
+      set shape "dot"
+      set label ""
+    ]
+  ]
+end
+
 to givePollen
   ask bees-on flowers[
    set hasPollen true
    set label "POLLEN"
    set color violet
   ]
-
 end
 
 to replenish-nectar
@@ -161,9 +212,9 @@ to replenish-nectar
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
+249
 10
-742
+781
 543
 -1
 -1
@@ -213,17 +264,17 @@ beesInitPopulation
 beesInitPopulation
 0
 100
-27.0
+28.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-110
-63
-173
-96
+105
+59
+179
+92
 NIL
 go
 T
@@ -262,10 +313,10 @@ Flower Settings
 1
 
 SLIDER
-28
-363
-200
-396
+18
+355
+190
+388
 maxNectar
 maxNectar
 1
@@ -277,10 +328,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-21
-425
-198
-458
+18
+411
+195
+444
 nectarReplenishRate
 nectarReplenishRate
 0
@@ -336,6 +387,21 @@ chancePollenToDisappear
 .01
 1
 NIL
+HORIZONTAL
+
+SLIDER
+18
+464
+208
+497
+flowerFertilizationRate
+flowerFertilizationRate
+1
+100
+100.0
+1
+1
+%
 HORIZONTAL
 
 @#$#@#$#@
