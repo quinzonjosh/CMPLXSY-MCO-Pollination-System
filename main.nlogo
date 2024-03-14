@@ -15,6 +15,7 @@ flowers-own [
   nectar-replenish-rate
   nectar-replenish-timer
   isFertilized
+  isBloomed
 ]
 
 seeds-own [
@@ -38,7 +39,6 @@ to go
 end
 
 to spawn-bees
-
   set-default-shape bees "bee"
 
   create-bees beesInitPopulation [
@@ -49,8 +49,6 @@ to spawn-bees
     set storingNectar false
     set hasPollen false
   ]
-
-
 end
 
 to create-beehive
@@ -73,17 +71,17 @@ to spawn-flowers
 
   create-flowers (flowerDensity / 100) * totalPatches [
     move-to one-of patches with [not any? turtles-here and pcolor = 52]
+    set isBloomed true
     set nectar maxNectar
     set nectar-replenish-rate nectarReplenishRate
     set isFertilized false
   ]
-
 end
 
 to bee-move
   ask bees [
     ; Check if there are flowers with nectar nearby
-    let target one-of (flowers with [nectar > 0] in-radius 5)
+    let target one-of (flowers with [nectar > 0 and isBloomed] in-radius 5)
     ifelse storingNectar [
       ; If the bee is storing nectar, move back to the beehive
       face patch 0 0
@@ -125,7 +123,7 @@ end
 to bee-lands-on-flower
   ask bees-on flowers [
     let flower-here one-of flowers-here
-    if [nectar] of flower-here > 0 and nectar-carried < beeNectarCapacity[
+    if [nectar] of flower-here > 0 and [isBloomed] of flower-here and nectar-carried < beeNectarCapacity [
       ask flower-here [
         set nectar nectar - 1
         if [hasPollen] of myself and random-float 100 < flowerFertilizationRate [ ; Check if the bee has pollen
