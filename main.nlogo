@@ -12,10 +12,10 @@ bees-own [
 
 flowers-own [
   nectar
-  nectar-replenish-rate
   nectar-replenish-timer
   isFertilized
   isBloomed
+  bloom-timer
 ]
 
 seeds-own [
@@ -36,6 +36,7 @@ to go
   randomSeedDeath
   replenish-nectar
   grow-seed
+  bloom-flower
   tick
 end
 
@@ -74,7 +75,6 @@ to spawn-flowers
     move-to one-of patches with [not any? turtles-here and pcolor = 52]
     set isBloomed true
     set nectar maxNectar
-    set nectar-replenish-rate nectarReplenishRate
     set isFertilized false
   ]
 end
@@ -216,7 +216,7 @@ end
 to replenish-nectar
   ask flowers [
     if nectar < maxNectar [
-      ifelse nectar-replenish-timer >= nectarReplenishRate [
+      ifelse nectar-replenish-timer >= nectarReplenishRate and isBloomed [
         set nectar nectar + 1
         set nectar-replenish-timer 0
       ]
@@ -235,6 +235,24 @@ to grow-seed
     [
       set breed flowers
       set color random 145
+      set isBloomed false
+      set isFertilized false
+      set nectar 0
+      set nectar-replenish-timer 0
+      set shape "plant"
+    ]
+  ]
+end
+
+to bloom-flower
+  ask flowers with [not isBloomed] [
+    ifelse bloom-timer < bloomDuration [
+      set bloom-timer bloom-timer + 1
+    ]
+    [
+      set isBloomed true
+      set nectar-replenish-timer 0
+      set shape "flower"
     ]
   ]
 end
@@ -457,6 +475,21 @@ seedGrowthDuration
 1
 100
 5.0
+1
+1
+ticks
+HORIZONTAL
+
+SLIDER
+16
+525
+188
+558
+bloomDuration
+bloomDuration
+1
+100
+10.0
 1
 1
 ticks
