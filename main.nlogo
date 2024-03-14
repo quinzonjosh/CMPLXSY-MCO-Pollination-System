@@ -17,6 +17,7 @@ flowers-own [
   isBloomed
   bloom-timer
   fertilization-timer
+  life-span
 ]
 
 seeds-own [
@@ -39,7 +40,23 @@ to go
   grow-seed
   bloom-flower
   check-and-hatch-seeds
+  update-flower-lifespan
   tick
+end
+
+to update-flower-lifespan
+  ask flowers [
+    if bloom-timer >= bloomDuration and not isBloomed [
+      set isBloomed true
+      set shape "flower"
+    ]
+    if life-span > 0 [
+      set life-span life-span - 1
+      if life-span <= 0 [
+        die
+      ]
+    ]
+  ]
 end
 
 to spawn-bees
@@ -72,12 +89,15 @@ end
 to spawn-flowers
   set-default-shape flowers "flower"
   let totalPatches count patches with [pcolor = 52]
+  let availableColors (remove [52] base-colors)
 
   create-flowers (flowerDensity / 100) * totalPatches [
     move-to one-of patches with [not any? turtles-here and pcolor = 52]
     set isBloomed true
     set nectar maxNectar
     set isFertilized false
+    set color one-of availableColors
+    set life-span flowerLifeSpan
   ]
 end
 
@@ -147,20 +167,35 @@ to check-and-hatch-seeds
   let displacement 2
 
   ask flowers with [isFertilized and fertilization-timer >= 10] [
-    hatch-seeds random 5 [
+
+    ; Find valid patches within displacement radius for spawning seeds
+    let valid-patches patches in-radius displacement with [pcolor = 52 and not any? flowers-here]
+
+    if count valid-patches > 0 [
+      let target-patch one-of valid-patches
+      ; call the function hatch-seeds-from, passingthe info of the parent flower and the targeted patch
+      hatch-seeds-from self target-patch
+    ]
+    set isFertilized false ; Reset fertilization status
+  ]
+
+  ask flowers with [isFertilized] [
+    set fertilization-timer fertilization-timer + 1 ; Increment the timer for fertilized flowers
+  ]
+end
+
+to hatch-seeds-from [parent-flower target-patch]
+  ask parent-flower [
+    hatch-seeds 5 [  ; Hatch 5 seeds
       set breed seeds
-      set heading random 360 ;This is the random angle
-      fd random displacement ;The + 1 is there to ensure seed does not spawn on the flower (radius 0)
+      set heading random 360
+      setxy [pxcor] of target-patch [pycor] of target-patch
       set color brown
       set shape "dot"
       set label ""
       set size 1
       set growthTime 0
     ]
-    set isFertilized false ; Reset fertilization status
-  ]
-  ask flowers with [isFertilized] [
-    set fertilization-timer fertilization-timer + 1 ; Increment the timer for fertilized flowers
   ]
 end
 
@@ -195,18 +230,22 @@ to replenish-nectar
 end
 
 to grow-seed
+  let availableColors (remove [52] base-colors)
+
   ask seeds [
     ifelse growthTime < seedGrowthDuration [
       set growthTime growthTime + 1
     ]
     [
+
       set breed flowers
-      set color random 145
+      set color one-of availableColors
       set isBloomed false
       set isFertilized false
       set nectar 0
       set nectar-replenish-timer 0
       set shape "plant"
+      set life-span flowerLifeSpan
     ]
   ]
 end
@@ -309,7 +348,7 @@ flowerDensity
 flowerDensity
 0
 100
-17.0
+1.0
 1
 1
 %
@@ -426,7 +465,7 @@ seedDeathChance
 seedDeathChance
 0
 100
-41.0
+9.0
 1
 1
 %
@@ -441,7 +480,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-5.0
+3.0
 1
 1
 ticks
@@ -456,8 +495,23 @@ bloomDuration
 bloomDuration
 1
 100
-10.0
+4.0
 1
+1
+ticks
+HORIZONTAL
+
+SLIDER
+28
+627
+200
+660
+flowerLifeSpan
+flowerLifeSpan
+50
+500
+50.0
+10
 1
 ticks
 HORIZONTAL
