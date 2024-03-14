@@ -143,11 +143,13 @@ to bee-lands-on-flower
 end
 
 to check-and-hatch-seeds
+  let displacement 2
+
   ask flowers with [isFertilized and fertilization-timer >= 10] [
     hatch-seeds random 5 [
       set breed seeds
-      set heading random 360
-      fd random 5 + 1 ; The + 1 is there to ensure seed does not spawn on the flower (radius 0)
+      set heading random 360 ;This is the random angle
+      fd random displacement ;The + 1 is there to ensure seed does not spawn on the flower (radius 0)
       set color brown
       set shape "dot"
       set label ""
