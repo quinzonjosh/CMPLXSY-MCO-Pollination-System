@@ -16,6 +16,7 @@ flowers-own [
   nectar-replenish-timer
   isFertilized
   isBloomed
+  fertilization-timer
 ]
 
 seeds-own [
@@ -35,6 +36,7 @@ to go
   bee-lands-on-flower
   randomSeedDeath
   replenish-nectar
+  check-and-hatch-seeds
   tick
 end
 
@@ -128,7 +130,7 @@ to bee-lands-on-flower
         set nectar nectar - 1
         if [hasPollen] of myself and random-float 100 < flowerFertilizationRate [ ; Check if the bee has pollen
           set isFertilized true
-          spawn-seeds-around-fertilized-flower
+          set fertilization-timer 0
         ]
       ]
       set nectar-carried nectar-carried + 1
@@ -140,55 +142,23 @@ to bee-lands-on-flower
   ]
 end
 
-to spawn-seeds-around-fertilized-flower
-  ask myself [
-;    let delay-duration 25 ; Adjust the delay duration (in ticks) as needed
-;    repeat delay-duration [
-;      wait 1
-;      tick-advance 1 ;
-;    ]
+to check-and-hatch-seeds
+  let displacement 1 ; Adjust the distance as needed
 
-    let displacement 1 ; Adjust the distance as needed
-
+  ask flowers with [isFertilized and fertilization-timer >= 10] [
     hatch-seeds 1 [
       set breed seeds
-      set heading 0; Set the initial heading to face east
-      fd displacement ; Move forward by the specified displacement
-      set color brown
-      set shape "dot" ; You can customize the shape of the seed
-      set label "" ; Clear the label for the spawned seed
-      set size 1
-    ]
-
-    hatch-seeds 1 [
-      set breed seeds
-      set heading 90;towards one-of flowers-here + 90 ; Set the initial heading to face north
-      fd displacement ; Move forward by the specified displacement
+      set heading random 360
+      fd displacement
       set color brown
       set shape "dot"
       set label ""
       set size 1
     ]
-
-    hatch-seeds 1 [
-      set breed seeds
-      set heading 180;towards one-of flowers-here + 180 ; Set the initial heading to face west
-      fd displacement ; Move forward by the specified displacement
-      set color brown
-      set shape "dot"
-      set label ""
-      set size 1
-    ]
-
-    hatch-seeds 1 [
-      set breed seeds
-      set heading 270; towards one-of flowers-here + 270 ; Set the initial heading to face south
-      fd displacement ; Move forward by the specified displacement
-      set color brown
-      set shape "dot"
-      set label ""
-      set size 1
-    ]
+    set isFertilized false ; Reset fertilization status
+  ]
+  ask flowers with [isFertilized] [
+    set fertilization-timer fertilization-timer + 1 ; Increment the timer for fertilized flowers
   ]
 end
 
