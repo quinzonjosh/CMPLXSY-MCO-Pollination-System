@@ -32,6 +32,7 @@ end
 to go
   bee-move
   bee-lands-on-flower
+  randomSeedDeath
   replenish-nectar
   tick
 end
@@ -153,7 +154,7 @@ to spawn-seeds-around-fertilized-flower
 
     hatch-seeds 1 [
       set breed seeds
-      set heading towards one-of flowers-here ; Set the initial heading to face east
+      set heading 0; Set the initial heading to face east
       fd displacement ; Move forward by the specified displacement
       set color brown
       set shape "dot" ; You can customize the shape of the seed
@@ -163,7 +164,7 @@ to spawn-seeds-around-fertilized-flower
 
     hatch-seeds 1 [
       set breed seeds
-      set heading towards one-of flowers-here + 90 ; Set the initial heading to face north
+      set heading 90;towards one-of flowers-here + 90 ; Set the initial heading to face north
       fd displacement ; Move forward by the specified displacement
       set color brown
       set shape "dot"
@@ -173,7 +174,7 @@ to spawn-seeds-around-fertilized-flower
 
     hatch-seeds 1 [
       set breed seeds
-      set heading towards one-of flowers-here + 180 ; Set the initial heading to face west
+      set heading 180;towards one-of flowers-here + 180 ; Set the initial heading to face west
       fd displacement ; Move forward by the specified displacement
       set color brown
       set shape "dot"
@@ -183,12 +184,20 @@ to spawn-seeds-around-fertilized-flower
 
     hatch-seeds 1 [
       set breed seeds
-      set heading towards one-of flowers-here + 270 ; Set the initial heading to face south
+      set heading 270; towards one-of flowers-here + 270 ; Set the initial heading to face south
       fd displacement ; Move forward by the specified displacement
       set color brown
       set shape "dot"
       set label ""
       set size 1
+    ]
+  ]
+end
+
+to randomSeedDeath
+  ask seeds[
+    if random-float 100 < seedDeathChance [
+      die
     ]
   ]
 end
@@ -403,6 +412,21 @@ flowerFertilizationRate
 1
 100
 100.0
+1
+1
+%
+HORIZONTAL
+
+SLIDER
+30
+578
+202
+611
+seedDeathChance
+seedDeathChance
+1
+100
+2.0
 1
 1
 %
