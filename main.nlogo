@@ -18,7 +18,7 @@ flowers-own [
 ]
 
 seeds-own [
-  bloomTime
+  growthTime
 ]
 
 to setup
@@ -34,6 +34,7 @@ to go
   bee-lands-on-flower
   randomSeedDeath
   replenish-nectar
+  grow-seed
   tick
 end
 
@@ -160,6 +161,7 @@ to spawn-seeds-around-fertilized-flower
       set shape "dot" ; You can customize the shape of the seed
       set label "" ; Clear the label for the spawned seed
       set size 1
+      set growthTime 0
     ]
 
     hatch-seeds 1 [
@@ -170,6 +172,7 @@ to spawn-seeds-around-fertilized-flower
       set shape "dot"
       set label ""
       set size 1
+      set growthTime 0
     ]
 
     hatch-seeds 1 [
@@ -180,6 +183,7 @@ to spawn-seeds-around-fertilized-flower
       set shape "dot"
       set label ""
       set size 1
+      set growthTime 0
     ]
 
     hatch-seeds 1 [
@@ -190,6 +194,7 @@ to spawn-seeds-around-fertilized-flower
       set shape "dot"
       set label ""
       set size 1
+      set growthTime 0
     ]
   ]
 end
@@ -220,6 +225,18 @@ to replenish-nectar
       [
         set nectar-replenish-timer nectar-replenish-timer + 1
       ]
+    ]
+  ]
+end
+
+to grow-seed
+  ask seeds [
+    ifelse growthTime < seedGrowthDuration [
+      set growthTime growthTime + 1
+    ]
+    [
+      set breed flowers
+      set color random 145
     ]
   ]
 end
@@ -349,7 +366,7 @@ nectarReplenishRate
 nectarReplenishRate
 0
 10
-9.0
+10.0
 1
 1
 ticks
@@ -411,7 +428,7 @@ flowerFertilizationRate
 flowerFertilizationRate
 1
 100
-100.0
+47.0
 1
 1
 %
@@ -424,12 +441,27 @@ SLIDER
 611
 seedDeathChance
 seedDeathChance
-1
+0
 100
-2.0
+41.0
 1
 1
 %
+HORIZONTAL
+
+SLIDER
+280
+595
+452
+628
+seedGrowthDuration
+seedGrowthDuration
+1
+100
+5.0
+1
+1
+ticks
 HORIZONTAL
 
 @#$#@#$#@
