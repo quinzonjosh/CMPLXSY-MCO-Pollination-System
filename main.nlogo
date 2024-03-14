@@ -54,7 +54,7 @@ end
 
 to create-beehive
   ask patches [
-    set pcolor lime
+    set pcolor 52 ; dark green
     if abs(pxcor) <= 2 and abs(pycor) <= 2 [
       ifelse abs(pycor) mod 2 = 0 [ set pcolor [221 148 29]] [ set pcolor yellow]
     ]
@@ -68,10 +68,10 @@ end
 
 to spawn-flowers
   set-default-shape flowers "flower"
-  let totalPatches count patches with [pcolor = lime]
+  let totalPatches count patches with [pcolor = 52]
 
   create-flowers (flowerDensity / 100) * totalPatches [
-    move-to one-of patches with [not any? turtles-here and pcolor = lime]
+    move-to one-of patches with [not any? turtles-here and pcolor = 52]
     set nectar maxNectar
     set nectar-replenish-rate nectarReplenishRate
     set isFertilized false
@@ -158,6 +158,7 @@ to spawn-seeds-around-fertilized-flower
       set color brown
       set shape "dot" ; You can customize the shape of the seed
       set label "" ; Clear the label for the spawned seed
+      set size 1
     ]
 
     hatch-seeds 1 [
@@ -167,6 +168,7 @@ to spawn-seeds-around-fertilized-flower
       set color brown
       set shape "dot"
       set label ""
+      set size 1
     ]
 
     hatch-seeds 1 [
@@ -176,6 +178,7 @@ to spawn-seeds-around-fertilized-flower
       set color brown
       set shape "dot"
       set label ""
+      set size 1
     ]
 
     hatch-seeds 1 [
@@ -185,6 +188,7 @@ to spawn-seeds-around-fertilized-flower
       set color brown
       set shape "dot"
       set label ""
+      set size 1
     ]
   ]
 end
