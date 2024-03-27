@@ -97,7 +97,7 @@ to spawn-flowers
     set nectar maxNectar
     set isFertilized false
     set color one-of availableColors
-    set life-span flowerLifeSpan
+    set life-span random ( flowerMaxLifeSpan - flowerMinLifeSpan + 1) + flowerMinLifeSpan
   ]
 end
 
@@ -245,7 +245,7 @@ to grow-seed
       set nectar 0
       set nectar-replenish-timer 0
       set shape "plant"
-      set life-span flowerLifeSpan
+      set life-span random ( flowerMaxLifeSpan - flowerMinLifeSpan + 1) + flowerMinLifeSpan
     ]
   ]
 end
@@ -348,7 +348,7 @@ flowerDensity
 flowerDensity
 0
 100
-1.0
+10.0
 1
 1
 %
@@ -465,7 +465,7 @@ seedDeathChance
 seedDeathChance
 0
 100
-9.0
+8.0
 1
 1
 %
@@ -480,7 +480,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-3.0
+9.0
 1
 1
 ticks
@@ -502,16 +502,31 @@ ticks
 HORIZONTAL
 
 SLIDER
-28
-627
-200
-660
-flowerLifeSpan
-flowerLifeSpan
-50
-500
+499
+553
+671
+586
+flowerMinLifeSpan
+flowerMinLifeSpan
+0
+100
+10.0
+1
+1
+ticks
+HORIZONTAL
+
+SLIDER
+504
+600
+678
+633
+flowerMaxLifeSpan
+flowerMaxLifeSpan
+0
+100
 50.0
-10
+1
 1
 ticks
 HORIZONTAL
