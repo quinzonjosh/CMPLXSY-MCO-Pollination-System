@@ -1,9 +1,11 @@
 extensions [ palette ]     ; for custom colors
 
+;breed defines custom turtles;mainly useful for when there a different kinds of turtles with their own behavior
 breed [ bees bee ]
 breed [flowers flower]
 breed [seeds seed]
 
+;own defines characteristics belonging to a turtle and or a specific breed.
 bees-own [
   nectar-carried
   storingNectar
@@ -24,6 +26,7 @@ seeds-own [
   growthTime
 ]
 
+;sets up initial environment including clearing all elements, creating central beehive, spawning bee agents, spawning flower agents,and resetting tick timer.
 to setup
   clear-all
   create-beehive
@@ -42,6 +45,25 @@ to go
   check-and-hatch-seeds
   update-flower-lifespan
   tick
+
+  ;if using yearly cycle then replace tick values with 182 and 364
+  if ticks = 182 and seasonCycle [ ;switches to rain
+    set beeSpeed 0.3
+    set chancePollenToDisappear 0.20
+    set flowerMaxLifeSpan 100
+    set seedGrowthDuration 13.5
+    set bloomDuration 2
+  ] if ticks = 364 and seasonCycle [ ;switches to dry
+    set beeSpeed 1.25
+    set chancePollenToDisappear 0.10
+    set flowerMaxLifeSpan 75
+    set seedGrowthDuration 4
+    set bloomDuration 4
+  ]
+
+  if ticks = 364 [
+    reset-ticks
+  ]
 end
 
 to update-flower-lifespan
@@ -108,7 +130,7 @@ to bee-move
     ifelse storingNectar [
       ; If the bee is storing nectar, move back to the beehive
       face patch 0 0
-      fd 1
+      fd beeSpeed
       if distance patch 0 0 < 2
       [
         bee-store-nectar
@@ -117,13 +139,13 @@ to bee-move
     [
       ifelse target != nobody [
         face target
-        fd 1
+        fd beeSpeed
       ]
       [
         ; If no nearby flowers have nectar, move randomly
         rt random 50
         lt random 50
-        fd 1
+        fd beeSpeed
       ]
 
       if random-float 1 < 0.1 and hasPollen [ ; 10% chance and currently has pollen
@@ -215,6 +237,7 @@ to givePollen
   ]
 end
 
+;grants nectar to flower
 to replenish-nectar
   ask flowers [
     if nectar < maxNectar [
@@ -262,6 +285,26 @@ to bloom-flower
     ]
   ]
 end
+
+;applies season effects
+to applyOneSeason
+  if currentSeason = "No Season Mode" [ ;default values
+    set beeSpeed 1
+    set chancePollenToDisappear 0.10
+    set flowerMaxLifeSpan 100 ;originally 50
+    set seedGrowthDuration 9
+    set bloomDuration 4
+  ] if currentSeason = "Dry" [ ;bees speed up, flower lifespan decreases due to accelerated wilting.
+    set beeSpeed 1.25
+    set chancePollenToDisappear 0.10
+    set flowerMaxLifeSpan 75
+  ] if currentSeason = "Rainy" [ ;bees slow down due to colder temperatue, pollen is more likely to be lost due to rain.
+    set beeSpeed 0.3
+    set chancePollenToDisappear 0.20
+    set seedGrowthDuration 13.5
+    set bloomDuration 2
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 249
@@ -291,10 +334,10 @@ ticks
 30.0
 
 BUTTON
-14
-62
-77
-95
+182
+10
+245
+43
 NIL
 setup
 NIL
@@ -308,10 +351,10 @@ NIL
 1
 
 SLIDER
-15
-115
-187
-148
+807
+150
+979
+183
 beesInitPopulation
 beesInitPopulation
 0
@@ -323,10 +366,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-105
-59
-179
-92
+21
+10
+95
+43
 NIL
 go
 T
@@ -340,10 +383,10 @@ NIL
 1
 
 SLIDER
-16
-301
-188
-334
+43
+67
+215
+100
 flowerDensity
 flowerDensity
 0
@@ -355,20 +398,20 @@ flowerDensity
 HORIZONTAL
 
 TEXTBOX
-21
-269
-171
-287
-Flower Settings
+54
+49
+204
+67
+             Flower Settings
 10
 0.0
 1
 
 SLIDER
-18
-355
-190
-388
+41
+106
+213
+139
 maxNectar
 maxNectar
 1
@@ -380,10 +423,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-18
-411
-195
-444
+35
+143
+212
+176
 nectarReplenishRate
 nectarReplenishRate
 0
@@ -395,10 +438,10 @@ ticks
 HORIZONTAL
 
 SLIDER
-19
-171
-191
-204
+809
+232
+981
+265
 beeNectarCapacity
 beeNectarCapacity
 1
@@ -410,10 +453,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-104
-16
-177
-49
+102
+10
+175
+43
 go once
 go
 NIL
@@ -427,10 +470,10 @@ NIL
 1
 
 SLIDER
-19
-220
-214
-253
+798
+272
+993
+305
 chancePollenToDisappear
 chancePollenToDisappear
 0
@@ -442,10 +485,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-18
-464
-208
-497
+31
+183
+221
+216
 flowerFertilizationRate
 flowerFertilizationRate
 1
@@ -457,10 +500,10 @@ flowerFertilizationRate
 HORIZONTAL
 
 SLIDER
-30
-578
-202
-611
+38
+259
+210
+292
 seedDeathChance
 seedDeathChance
 0
@@ -472,25 +515,25 @@ seedDeathChance
 HORIZONTAL
 
 SLIDER
-280
-595
-452
-628
+38
+295
+210
+328
 seedGrowthDuration
 seedGrowthDuration
 1
 100
-9.0
+4.0
 1
 1
 ticks
 HORIZONTAL
 
 SLIDER
-16
-525
-188
-558
+38
+220
+210
+253
 bloomDuration
 bloomDuration
 1
@@ -502,34 +545,107 @@ ticks
 HORIZONTAL
 
 SLIDER
-499
-553
-671
-586
+37
+335
+209
+368
 flowerMinLifeSpan
 flowerMinLifeSpan
 0
 100
-10.0
+11.0
 1
 1
 ticks
 HORIZONTAL
 
 SLIDER
-504
-600
-678
-633
+35
+371
+209
+404
 flowerMaxLifeSpan
 flowerMaxLifeSpan
 0
 100
-50.0
+75.0
 1
 1
 ticks
 HORIZONTAL
+
+TEXTBOX
+836
+10
+986
+28
+           Season Settings
+11
+0.0
+1
+
+CHOOSER
+821
+34
+1042
+79
+currentSeason
+currentSeason
+"No Season Mode" "Dry" "Rainy"
+0
+
+BUTTON
+873
+92
+998
+125
+NIL
+applyOneSeason
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+TEXTBOX
+817
+134
+967
+152
+              Bee Settings
+11
+0.0
+1
+
+SLIDER
+808
+191
+980
+224
+beeSpeed
+beeSpeed
+0.1
+1.5
+1.25
+0.1
+1
+NIL
+HORIZONTAL
+
+SWITCH
+1064
+38
+1189
+71
+seasonCycle
+seasonCycle
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
