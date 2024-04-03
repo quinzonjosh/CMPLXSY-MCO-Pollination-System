@@ -182,7 +182,7 @@ to bee-lands-on-flower
 end
 
 to check-and-hatch-seeds
-  let displacement 2
+  let displacement random 10
 
   ask flowers with [isFertilized and fertilization-timer >= 10] [
 
@@ -358,7 +358,7 @@ beesInitPopulation
 beesInitPopulation
 0
 100
-11.0
+20.0
 1
 1
 NIL
@@ -390,7 +390,7 @@ flowerDensity
 flowerDensity
 0
 100
-10.0
+30.0
 1
 1
 %
@@ -415,7 +415,7 @@ maxNectar
 maxNectar
 1
 10
-2.0
+10.0
 1
 1
 NIL
@@ -492,7 +492,7 @@ flowerFertilizationRate
 flowerFertilizationRate
 1
 100
-47.0
+64.0
 1
 1
 %
@@ -507,7 +507,7 @@ seedDeathChance
 seedDeathChance
 0
 100
-6.0
+4.0
 1
 1
 %
@@ -730,7 +730,7 @@ dryPollenDisappearChance
 dryPollenDisappearChance
 0
 1
-0.1
+0.03
 0.01
 1
 NIL
