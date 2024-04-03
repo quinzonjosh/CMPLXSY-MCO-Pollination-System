@@ -47,13 +47,14 @@ to go
   tick
 
   ;if using yearly cycle then replace tick values with 182 and 364
-  if ticks = 182 and seasonCycle [ ;switches to rain
+  if ticks = rainyEndOnTick and seasonCycle [ ;switches to rain
     set beeSpeed 0.3
     set chancePollenToDisappear 0.20
     set flowerMaxLifeSpan 100
     set seedGrowthDuration 13.5
     set bloomDuration 2
-  ] if ticks = 364 and seasonCycle [ ;switches to dry
+
+  ] if ticks = dryEndOnTick and seasonCycle [ ;switches to dry
     set beeSpeed 1.25
     set chancePollenToDisappear 0.10
     set flowerMaxLifeSpan 75
@@ -299,7 +300,7 @@ to applyOneSeason
     set chancePollenToDisappear 0.10
     set flowerMaxLifeSpan 75
   ] if currentSeason = "Rainy" [ ;bees slow down due to colder temperatue, pollen is more likely to be lost due to rain.
-    set beeSpeed 0.3
+    set beeSpeed 0.3 + 1
     set chancePollenToDisappear 0.20
     set seedGrowthDuration 13.5
     set bloomDuration 2
@@ -523,7 +524,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-4.0
+9.0
 1
 1
 ticks
@@ -568,7 +569,7 @@ flowerMaxLifeSpan
 flowerMaxLifeSpan
 0
 100
-75.0
+100.0
 1
 1
 ticks
@@ -630,7 +631,7 @@ beeSpeed
 beeSpeed
 0.1
 1.5
-1.25
+1.0
 0.1
 1
 NIL
