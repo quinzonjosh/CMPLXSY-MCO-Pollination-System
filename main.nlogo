@@ -47,13 +47,13 @@ to go
   tick
 
   ;if using yearly cycle then replace tick values with 182 and 364
-  if ticks mod rainyEndOnTick = 0 and seasonCycle [ ;switches to rain
+  if ticks mod rainStartOnTick = 0 and seasonCycle [ ;switches to rain
     set beeSpeed rainyBeeSpeed
     set chancePollenToDisappear rainyPollenDisappearChance
     set flowerMaxLifeSpan rainyFlowerMaxLifeSpan
     set seedGrowthDuration rainySeedGrowthDuration
     set bloomDuration rainyBloomDuration
-  ] if ticks mod dryEndOnTick = 0 and seasonCycle [ ;switches to dry
+  ] if ticks mod dryStartOnTick = 0 and seasonCycle [ ;switches to dry
     set beeSpeed dryBeeSpeed
     set chancePollenToDisappear dryPollenDisappearChance
     set flowerMaxLifeSpan dryFlowerMaxLifeSpan
@@ -358,7 +358,7 @@ beesInitPopulation
 beesInitPopulation
 0
 100
-28.0
+11.0
 1
 1
 NIL
@@ -390,7 +390,7 @@ flowerDensity
 flowerDensity
 0
 100
-20.0
+10.0
 1
 1
 %
@@ -477,7 +477,7 @@ chancePollenToDisappear
 chancePollenToDisappear
 0
 1
-0.1
+0.2
 .01
 1
 NIL
@@ -507,7 +507,7 @@ seedDeathChance
 seedDeathChance
 0
 100
-8.0
+6.0
 1
 1
 %
@@ -537,7 +537,7 @@ bloomDuration
 bloomDuration
 1
 100
-4.0
+8.0
 1
 1
 ticks
@@ -552,7 +552,7 @@ flowerMinLifeSpan
 flowerMinLifeSpan
 0
 100
-15.0
+20.0
 1
 1
 ticks
@@ -567,7 +567,7 @@ flowerMaxLifeSpan
 flowerMaxLifeSpan
 0
 100
-50.0
+60.0
 1
 1
 ticks
@@ -591,7 +591,7 @@ CHOOSER
 currentSeason
 currentSeason
 "No Season Mode" "Dry" "Rainy"
-0
+2
 
 BUTTON
 834
@@ -629,7 +629,7 @@ beeSpeed
 beeSpeed
 0.1
 3
-1.0
+0.3
 0.1
 1
 NIL
@@ -655,7 +655,7 @@ rainyEndOnTick
 rainyEndOnTick
 1
 364
-183.0
+182.0
 1
 1
 NIL
@@ -670,7 +670,7 @@ dryEndOnTick
 dryEndOnTick
 1
 364
-1.0
+364.0
 1
 1
 NIL
@@ -685,7 +685,7 @@ dryBeeSpeed
 dryBeeSpeed
 0
 3
-0.5
+1.2
 0.1
 1
 NIL
@@ -700,7 +700,7 @@ rainyBeeSpeed
 rainyBeeSpeed
 0
 1
-0.2
+0.3
 0.1
 1
 NIL
@@ -715,7 +715,7 @@ rainyPollenDisappearChance
 rainyPollenDisappearChance
 0
 0.5
-0.0
+0.2
 0.01
 1
 NIL
@@ -730,7 +730,7 @@ dryPollenDisappearChance
 dryPollenDisappearChance
 0
 1
-0.0
+0.1
 0.01
 1
 NIL
@@ -745,7 +745,7 @@ rainyFlowerMaxLifespan
 rainyFlowerMaxLifespan
 0
 100
-0.0
+60.0
 1
 1
 NIL
@@ -760,7 +760,7 @@ dryFlowerMaxLifespan
 dryFlowerMaxLifespan
 0
 100
-0.0
+35.0
 1
 1
 NIL
@@ -775,7 +775,7 @@ rainySeedGrowthDuration
 rainySeedGrowthDuration
 0
 100
-0.0
+5.0
 1
 1
 NIL
@@ -790,7 +790,7 @@ drySeedGrowthDuration
 drySeedGrowthDuration
 0
 100
-0.0
+11.0
 1
 1
 NIL
@@ -805,7 +805,7 @@ rainyBloomDuration
 rainyBloomDuration
 0
 100
-0.0
+8.0
 1
 1
 NIL
@@ -820,7 +820,7 @@ dryBloomDuration
 dryBloomDuration
 0
 100
-0.0
+4.0
 1
 1
 NIL
