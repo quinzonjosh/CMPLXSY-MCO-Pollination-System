@@ -291,7 +291,7 @@ to applyOneSeason
   if currentSeason = "No Season Mode" [ ;default values
     set beeSpeed 1
     set chancePollenToDisappear 0.10
-    set flowerMaxLifeSpan 100;
+    set flowerMaxLifeSpan 50;
     set seedGrowthDuration 9
     set bloomDuration 4
   ] if currentSeason = "Dry" [ ;bees speed up, flower lifespan decreases due to accelerated wilting.
@@ -571,7 +571,7 @@ flowerMaxLifeSpan
 flowerMaxLifeSpan
 0
 100
-100.0
+50.0
 1
 1
 ticks
@@ -646,7 +646,7 @@ SWITCH
 58
 seasonCycle
 seasonCycle
-1
+0
 1
 -1000
 
@@ -659,7 +659,7 @@ rainyEndOnTick
 rainyEndOnTick
 1
 364
-182.0
+183.0
 1
 1
 NIL
@@ -674,7 +674,7 @@ dryEndOnTick
 dryEndOnTick
 1
 364
-364.0
+1.0
 1
 1
 NIL
@@ -689,7 +689,7 @@ dryBeeSpeed
 dryBeeSpeed
 0
 3
-0.0
+0.5
 0.1
 1
 NIL
@@ -703,8 +703,8 @@ SLIDER
 rainyBeeSpeed
 rainyBeeSpeed
 0
-3
-0.0
+1
+0.2
 0.1
 1
 NIL
@@ -718,7 +718,7 @@ SLIDER
 rainyPollenDisappearChance
 rainyPollenDisappearChance
 0
-1
+0.5
 0.0
 0.01
 1
