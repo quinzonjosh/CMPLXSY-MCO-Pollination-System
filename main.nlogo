@@ -47,7 +47,7 @@ to go
   tick
 
   ;if using yearly cycle then replace tick values with 182 and 364
-  if ticks mod rainStartOnTick = 0 and seasonCycle [ ;switches to rain
+  if ticks mod rainyStartOnTick = 0 and seasonCycle [ ;switches to rain
     set beeSpeed rainyBeeSpeed
     set chancePollenToDisappear rainyPollenDisappearChance
     set flowerMaxLifeSpan rainyFlowerMaxLifeSpan
@@ -651,8 +651,8 @@ SLIDER
 109
 978
 142
-rainyEndOnTick
-rainyEndOnTick
+rainyStartOnTick
+rainyStartOnTick
 1
 364
 182.0
@@ -666,8 +666,8 @@ SLIDER
 109
 1155
 142
-dryEndOnTick
-dryEndOnTick
+dryStartOnTick
+dryStartOnTick
 1
 364
 364.0
