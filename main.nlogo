@@ -48,21 +48,20 @@ to go
 
   ;if using yearly cycle then replace tick values with 182 and 364
   if ticks = rainyEndOnTick and seasonCycle [ ;switches to rain
-    set beeSpeed 0.3
-    set chancePollenToDisappear 0.20
-    set flowerMaxLifeSpan 100
-    set seedGrowthDuration 13.5
-    set bloomDuration 2
-
+    set beeSpeed rainyBeeSpeed
+    set chancePollenToDisappear rainyPollenDisappearChance
+    set flowerMaxLifeSpan rainyFlowerMaxLifeSpan
+    set seedGrowthDuration rainySeedGrowthDuration
+    set bloomDuration rainyBloomDuration
   ] if ticks = dryEndOnTick and seasonCycle [ ;switches to dry
-    set beeSpeed 1.25
-    set chancePollenToDisappear 0.10
-    set flowerMaxLifeSpan 75
-    set seedGrowthDuration 4
-    set bloomDuration 4
+    set beeSpeed dryBeeSpeed
+    set chancePollenToDisappear dryPollenDisappearChance
+    set flowerMaxLifeSpan dryFlowerMaxLifeSpan
+    set seedGrowthDuration drySeedGrowthDuration
+    set bloomDuration dryBloomDuration
   ]
 
-  if ticks = 364 [
+  if ticks = 364 [ ;reset at end of year
     reset-ticks
   ]
 end
@@ -292,18 +291,21 @@ to applyOneSeason
   if currentSeason = "No Season Mode" [ ;default values
     set beeSpeed 1
     set chancePollenToDisappear 0.10
-    set flowerMaxLifeSpan 100 ;originally 50
+    set flowerMaxLifeSpan 100;
     set seedGrowthDuration 9
     set bloomDuration 4
   ] if currentSeason = "Dry" [ ;bees speed up, flower lifespan decreases due to accelerated wilting.
-    set beeSpeed 1.25
-    set chancePollenToDisappear 0.10
-    set flowerMaxLifeSpan 75
+    set beeSpeed dryBeeSpeed
+    set chancePollenToDisappear dryPollenDisappearChance
+    set flowerMaxLifeSpan dryFlowerMaxLifeSpan
+    set seedGrowthDuration drySeedGrowthDuration
+    set bloomDuration dryBloomDuration
   ] if currentSeason = "Rainy" [ ;bees slow down due to colder temperatue, pollen is more likely to be lost due to rain.
-    set beeSpeed 0.3 + 1
-    set chancePollenToDisappear 0.20
-    set seedGrowthDuration 13.5
-    set bloomDuration 2
+    set beeSpeed rainyBeeSpeed
+    set chancePollenToDisappear rainyPollenDisappearChance
+    set flowerMaxLifeSpan rainyFlowerMaxLifeSpan
+    set seedGrowthDuration rainySeedGrowthDuration
+    set bloomDuration rainyBloomDuration
   ]
 end
 @#$#@#$#@
@@ -352,10 +354,10 @@ NIL
 1
 
 SLIDER
-807
-150
-979
-183
+968
+381
+1140
+414
 beesInitPopulation
 beesInitPopulation
 0
@@ -439,10 +441,10 @@ ticks
 HORIZONTAL
 
 SLIDER
-809
-232
-981
-265
+991
+419
+1163
+452
 beeNectarCapacity
 beeNectarCapacity
 1
@@ -471,15 +473,15 @@ NIL
 1
 
 SLIDER
-798
-272
-993
-305
+788
+421
+983
+454
 chancePollenToDisappear
 chancePollenToDisappear
 0
 1
-0.1
+0.2
 .01
 1
 NIL
@@ -524,7 +526,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-9.0
+13.5
 1
 1
 ticks
@@ -539,7 +541,7 @@ bloomDuration
 bloomDuration
 1
 100
-4.0
+2.0
 1
 1
 ticks
@@ -576,9 +578,9 @@ ticks
 HORIZONTAL
 
 TEXTBOX
-836
+753
 10
-986
+903
 28
            Season Settings
 11
@@ -586,20 +588,20 @@ TEXTBOX
 1
 
 CHOOSER
-821
-34
-1042
-79
+787
+26
+1008
+71
 currentSeason
 currentSeason
 "No Season Mode" "Dry" "Rainy"
 0
 
 BUTTON
-873
-92
-998
-125
+834
+73
+959
+106
 NIL
 applyOneSeason
 NIL
@@ -613,40 +615,220 @@ NIL
 1
 
 TEXTBOX
-817
-134
-967
-152
+788
+366
+938
+384
               Bee Settings
 11
 0.0
 1
 
 SLIDER
-808
-191
-980
-224
+789
+383
+961
+416
 beeSpeed
 beeSpeed
 0.1
-1.5
-1.0
+3
+0.3
 0.1
 1
 NIL
 HORIZONTAL
 
 SWITCH
-1064
-38
-1189
-71
+1015
+25
+1140
+58
 seasonCycle
 seasonCycle
 0
 1
 -1000
+
+SLIDER
+806
+109
+978
+142
+rainyEndOnTick
+rainyEndOnTick
+1
+364
+182.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+983
+109
+1155
+142
+dryEndOnTick
+dryEndOnTick
+1
+364
+364.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+983
+145
+1155
+178
+dryBeeSpeed
+dryBeeSpeed
+0
+3
+0.0
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+798
+145
+977
+178
+rainyBeeSpeed
+rainyBeeSpeed
+0
+3
+0.0
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+860
+182
+1119
+215
+rainyPollenDisappearChance
+rainyPollenDisappearChance
+0
+1
+0.0
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+866
+217
+1112
+250
+dryPollenDisappearChance
+dryPollenDisappearChance
+0
+1
+0.0
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+796
+253
+982
+286
+rainyFlowerMaxLifespan
+rainyFlowerMaxLifespan
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+985
+252
+1160
+285
+dryFlowerMaxLifespan
+dryFlowerMaxLifespan
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+787
+290
+983
+323
+rainySeedGrowthDuration
+rainySeedGrowthDuration
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+985
+288
+1171
+321
+drySeedGrowthDuration
+drySeedGrowthDuration
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+812
+326
+984
+359
+rainyBloomDuration
+rainyBloomDuration
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+986
+326
+1158
+359
+dryBloomDuration
+dryBloomDuration
+0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
