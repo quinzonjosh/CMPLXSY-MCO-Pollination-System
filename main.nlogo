@@ -47,22 +47,18 @@ to go
   tick
 
   ;if using yearly cycle then replace tick values with 182 and 364
-  if ticks = rainyEndOnTick and seasonCycle [ ;switches to rain
+  if ticks mod rainyEndOnTick = 0 and seasonCycle [ ;switches to rain
     set beeSpeed rainyBeeSpeed
     set chancePollenToDisappear rainyPollenDisappearChance
     set flowerMaxLifeSpan rainyFlowerMaxLifeSpan
     set seedGrowthDuration rainySeedGrowthDuration
     set bloomDuration rainyBloomDuration
-  ] if ticks = dryEndOnTick and seasonCycle [ ;switches to dry
+  ] if ticks mod dryEndOnTick = 0 and seasonCycle [ ;switches to dry
     set beeSpeed dryBeeSpeed
     set chancePollenToDisappear dryPollenDisappearChance
     set flowerMaxLifeSpan dryFlowerMaxLifeSpan
     set seedGrowthDuration drySeedGrowthDuration
     set bloomDuration dryBloomDuration
-  ]
-
-  if ticks = 364 [ ;reset at end of year
-    reset-ticks
   ]
 end
 
@@ -394,7 +390,7 @@ flowerDensity
 flowerDensity
 0
 100
-10.0
+20.0
 1
 1
 %
@@ -526,7 +522,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-9.0
+5.0
 1
 1
 ticks
@@ -556,7 +552,7 @@ flowerMinLifeSpan
 flowerMinLifeSpan
 0
 100
-11.0
+15.0
 1
 1
 ticks
@@ -646,7 +642,7 @@ SWITCH
 58
 seasonCycle
 seasonCycle
-0
+1
 1
 -1000
 
