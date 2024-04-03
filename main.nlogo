@@ -354,10 +354,10 @@ NIL
 1
 
 SLIDER
-968
-381
-1140
-414
+993
+382
+1165
+415
 beesInitPopulation
 beesInitPopulation
 0
@@ -441,9 +441,9 @@ ticks
 HORIZONTAL
 
 SLIDER
-991
+996
 419
-1163
+1168
 452
 beeNectarCapacity
 beeNectarCapacity
@@ -473,15 +473,15 @@ NIL
 1
 
 SLIDER
-788
-421
-983
-454
+791
+420
+986
+453
 chancePollenToDisappear
 chancePollenToDisappear
 0
 1
-0.2
+0.1
 .01
 1
 NIL
@@ -526,7 +526,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-13.5
+9.0
 1
 1
 ticks
@@ -541,7 +541,7 @@ bloomDuration
 bloomDuration
 1
 100
-2.0
+4.0
 1
 1
 ticks
@@ -615,25 +615,25 @@ NIL
 1
 
 TEXTBOX
-788
-366
-938
-384
+886
+362
+1036
+380
               Bee Settings
 11
 0.0
 1
 
 SLIDER
-789
-383
-961
-416
+813
+381
+985
+414
 beeSpeed
 beeSpeed
 0.1
 3
-0.3
+1.0
 0.1
 1
 NIL
@@ -646,7 +646,7 @@ SWITCH
 58
 seasonCycle
 seasonCycle
-0
+1
 1
 -1000
 
