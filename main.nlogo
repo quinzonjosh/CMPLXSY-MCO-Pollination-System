@@ -644,7 +644,7 @@ SWITCH
 58
 seasonCycle
 seasonCycle
-1
+0
 1
 -1000
 
@@ -833,7 +833,7 @@ PLOT
 430
 335
 580
-plot 1
+populations
 NIL
 NIL
 0.0
@@ -855,9 +855,42 @@ SWITCH
 54
 stopAt500
 stopAt500
-1
+0
 1
 -1000
+
+MONITOR
+355
+437
+412
+482
+flowers
+count flowers
+0
+1
+11
+
+MONITOR
+422
+439
+479
+484
+seeds
+count seeds
+0
+1
+11
+
+MONITOR
+493
+439
+551
+484
+growing
+count flowers with [shape = \"plant\"]
+0
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
