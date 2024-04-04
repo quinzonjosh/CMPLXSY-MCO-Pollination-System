@@ -36,6 +36,8 @@ to setup
 end
 
 to go
+  if stopAt500 [if ticks >= 500 [stop] ]
+
   bee-move
   bee-lands-on-flower
   randomSeedDeath
@@ -306,13 +308,13 @@ to applyOneSeason
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-249
+284
 10
-781
-543
+699
+426
 -1
 -1
-15.9
+12.33333333333334
 1
 10
 1
@@ -390,7 +392,7 @@ flowerDensity
 flowerDensity
 0
 100
-30.0
+25.0
 1
 1
 %
@@ -477,7 +479,7 @@ chancePollenToDisappear
 chancePollenToDisappear
 0
 1
-0.2
+0.1
 .01
 1
 NIL
@@ -522,7 +524,7 @@ seedGrowthDuration
 seedGrowthDuration
 1
 100
-5.0
+10.0
 1
 1
 ticks
@@ -537,7 +539,7 @@ bloomDuration
 bloomDuration
 1
 100
-8.0
+10.0
 1
 1
 ticks
@@ -552,7 +554,7 @@ flowerMinLifeSpan
 flowerMinLifeSpan
 0
 100
-20.0
+25.0
 1
 1
 ticks
@@ -567,7 +569,7 @@ flowerMaxLifeSpan
 flowerMaxLifeSpan
 0
 100
-60.0
+45.0
 1
 1
 ticks
@@ -591,7 +593,7 @@ CHOOSER
 currentSeason
 currentSeason
 "No Season Mode" "Dry" "Rainy"
-2
+1
 
 BUTTON
 834
@@ -629,7 +631,7 @@ beeSpeed
 beeSpeed
 0.1
 3
-0.3
+1.2
 0.1
 1
 NIL
@@ -730,7 +732,7 @@ dryPollenDisappearChance
 dryPollenDisappearChance
 0
 1
-0.03
+0.1
 0.01
 1
 NIL
@@ -745,7 +747,7 @@ rainyFlowerMaxLifespan
 rainyFlowerMaxLifespan
 0
 100
-60.0
+75.0
 1
 1
 NIL
@@ -760,7 +762,7 @@ dryFlowerMaxLifespan
 dryFlowerMaxLifespan
 0
 100
-35.0
+45.0
 1
 1
 NIL
@@ -790,7 +792,7 @@ drySeedGrowthDuration
 drySeedGrowthDuration
 0
 100
-11.0
+10.0
 1
 1
 NIL
@@ -805,7 +807,7 @@ rainyBloomDuration
 rainyBloomDuration
 0
 100
-8.0
+15.0
 1
 1
 NIL
@@ -820,11 +822,42 @@ dryBloomDuration
 dryBloomDuration
 0
 100
-4.0
+10.0
 1
 1
 NIL
 HORIZONTAL
+
+PLOT
+31
+430
+335
+580
+plot 1
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"flowers" 1.0 0 -14439633 true "" "plot count flowers"
+"seeds" 1.0 0 -4079321 true "" "plot count seeds"
+"growing" 1.0 0 -15575016 true "" "plot count flowers with [shape = \"plant\"]"
+
+SWITCH
+1182
+21
+1288
+54
+stopAt500
+stopAt500
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
